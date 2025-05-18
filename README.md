@@ -11,7 +11,7 @@
 
 ---
 
-## 🔧 Features
+## 🔧 Features:
 
 - 📝 User Registration and Login
 - 📢 Create and Share Events
