@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Pulse</title>
+    <style>
+        :root {
+            --primary-color: #4a4a4a;
+            --secondary-color: #8a2be2;
+            --accent-color: #1e90ff;
+            --accent-color-2: #32cd32;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-light: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --card-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Categories */
+        .categories {
+            padding: 20px 0;
+        }
+        
+        .categories-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .categories-title h2 {
+            font-size: 24px;
+        }
+        
+        .categories-list {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: thin;
+        }
+        
+        .categories-list::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .categories-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .category-item {
+            flex: 0 0 auto;
+            padding: 8px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .category-item.active {
+            background-color: var(--secondary-color);
+        }
+        
+        .category-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-item.active:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .event-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .event-image {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .event-card:hover .event-image img {
+            transform: scale(1.05);
+        }
+        
+        .event-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .music-category {
+            background-color: var(--secondary-color);
+        }
+        
+        .sports-category {
+            background-color: var(--accent-color-2);
+        }
+        
+        .exhibition-category {
+            background-color: var(--accent-color);
+        }
+        
+        .event-date {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .event-content {
+            padding: 20px;
+        }
+        
+        .event-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .event-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .event-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .event-organizer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .organizer-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .organizer-name {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .verified-badge {
+            width: 14px;
+            height: 14px;
+            background-color: #1DA1F2;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 4px;
+            font-size: 8px;
+            color: white;
+        }
+        
+        /* Create Event Button */
+        .create-event {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--secondary-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+        }
+        
+        .create-event:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--secondary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            background-color: var(--card-bg);
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--text-light);
+        }
+        
+        .footer-bottom {
+            margin-top: 30px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .events-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-text {
+                display: none;
+            }
+            
+            .categories-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-inner">
+            <a href="#" class="logo">Community Pulse</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search events...">
+                <button>🔍</button>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary">
+                    <span class="btn-text">Create Event</span> +
+                </button>
+                <a href="#" class="btn btn-primary">Login</a>
+                <!-- <div class="user-avatar">V</div> -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Discover What's Happening Nearby</h1>
+            <p>Connect with your local community through events, workshops, and gatherings in your neighborhood</p>
+            <div class="btn btn-primary">Find Events Near Me</div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+            <div class="categories-title">
+                <h2>Browse Events</h2>
+                <div class="view-all">View All</div>
+            </div>
+            <div class="categories-list">
+                <div class="category-item active">All Events</div>
+                <div class="category-item">Garage Sales</div>
+                <div class="category-item">Sports Matches</div>
+                <div class="category-item">Community Classes</div>
+                <div class="category-item">Volunteer Opportunities</div>
+                <div class="category-item">Exhibitions</div>
+                <div class="category-item">Festivals</div>
+            </div>
+        </section>
+
+        <!-- Events Grid -->
+        <section class="events-grid">
+            <!-- Event Card 1 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Live Music Festival">
+                    <span class="event-category music-category">Live Music Festival</span>
+                    <span class="event-date">Aug 31</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Live Music Festival</h3>
+                    <p class="event-description">Experience live music, local food and beverages.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">U</div>
+                            <span class="organizer-name">Unique Lark</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 2 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Jewelry Exhibition">
+                    <span class="event-category exhibition-category">Jewelry Exhibition</span>
+                    <span class="event-date">Aug 25-27</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Jewelry Exhibition</h3>
+                    <p class="event-description">Check out our craftsman jewelry showcases featuring regional artisans. Free entry. Also featuring children's activity areas, food stalls, and live music.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">V</div>
+                            <span class="organizer-name">Vedika Barsaiyan</span>
+                            <span class="verified-badge">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 3 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Tennis Tournament">
+                    <span class="event-category sports-category">Tennis Match</span>
+                    <span class="event-date">Jul 22</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Tennis Tournament</h3>
+                    <p class="event-description">Watch local championship matches hosted at our community tennis court. Free for the first 100, then $5 up to capacity.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">R</div>
+                            <span class="organizer-name">Regional Sports Organization</span>
+                            <span class="verified-badge">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 4 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Yoga in the Park">
+                    <span class="event-category">Community Class</span>
+                    <span class="event-date">Jul 20</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Yoga in the Park</h3>
+                    <p class="event-description">Join us for a relaxing yoga session in Central Park. All levels welcome. Bring your own mat.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">M</div>
+                            <span class="organizer-name">Mind & Body Wellness</span>
+                            <span class="verified-badge">✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 5 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Neighborhood Cleanup">
+                    <span class="event-category">Volunteer</span>
+                    <span class="event-date">Jul 15</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Neighborhood Cleanup</h3>
+                    <p class="event-description">Help keep our community beautiful! Supplies provided. Refreshments served after.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">G</div>
+                            <span class="organizer-name">Green Community Initiative</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 6 -->
+            <div class="event-card">
+                <div class="event-image">
+                    <img src="/api/placeholder/400/320" alt="Weekend Garage Sale">
+                    <span class="event-category">Garage Sale</span>
+                    <span class="event-date">Jul 12-13</span>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">Multi-Family Garage Sale</h3>
+                    <p class="event-description">Great deals on furniture, clothing, toys, and more! 15 families participating.</p>
+                    <div class="event-footer">
+                        <div class="event-organizer">
+                            <div class="organizer-avatar">S</div>
+                            <span class="organizer-name">Sunset Neighborhood Association</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading More -->
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading more events...</p>
+        </div>
+    </main>
+
+    <!-- Create Event Button -->
+    <div class="create-event">+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Community Pulse</h3>
+                    <p>Connecting neighborhoods and building stronger communities through local events.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Garage Sales</a></li>
+                        <li><a href="#">Sports Matches</a></li>
+                        <li><a href="#">Community Classes</a></li>
+                        <li><a href="#">Volunteer Opportunities</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Stay Connected</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Sign Up</a></li>
+                        <li><a href="#">Create Event</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Community Pulse. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample JavaScript for event interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filtering
+            const categoryItems = document.querySelectorAll('.category-item');
+            
+            categoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    categoryItems.forEach(cat => cat.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                    
+                    // Here you would typically filter the events
+                    // For demo purposes, we'll just show a loading animation
+                    const loading = document.querySelector('.loading');
+                    loading.style.display = 'block';
+                    
+                    // Simulate loading
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                    }, 1000);
+                });
+            });
+            
+            // Create Event button
+            const createEventBtn = document.querySelector('.create-event');
+            createEventBtn.addEventListener('click', () => {
+                alert('Create Event form would open here!');
+            });
+            
+            // Infinite scroll simulation
+            window.addEventListener('scroll', () => {
+                const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+                
+                if (scrollTop + clientHeight >= scrollHeight - 5) {
+                    // User has scrolled to the bottom
+                    const loading = document.querySelector('.loading');
+                    loading.style.display = 'block';
+                    
+                    // Simulate loading more content
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                        // In a real application, you would load more events here
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
